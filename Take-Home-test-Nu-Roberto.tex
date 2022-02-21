@@ -1,0 +1,1145 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Take-Home-test-Nu-Roberto}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    \title{Take-Home test 1Q22}
+    \author{Roberto Vásquez Martínez}
+    \date{\today}
+    \maketitle
+
+    
+    \hypertarget{take-home-test-nu-mx-2022}{%
+\section{Take Home test Nu MX 2022}\label{take-home-test-nu-mx-2022}}
+
+    \hypertarget{data-wrangling-exploration}{%
+\subsection{Data Wrangling +
+Exploration}\label{data-wrangling-exploration}}
+
+    In the next code cell, we charge the datasets that help us in the first
+section. We wil use \texttt{pandas} Python library in order to
+manipulate the datasets.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{n}{magic\PYZus{}towns}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pueblos\PYZus{}magicos.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{mexico\PYZus{}tourism}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}mexico.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We show a preview of the data sets. Firstly, we show the head of
+\texttt{pueblos\_magicos.csv}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+        pueblo\_magico               estado  pob\_2010  pob\_2015
+0            Asientos       Aguascalientes     48358     50864
+1            Calvillo       Aguascalientes     57627     60760
+2  San José de Gracia       Aguascalientes      7160      9661
+3              Tecate      Baja California     89999    110870
+4              La Paz  Baja California Sur    265717    293687
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Then, we show the head of \texttt{turismo\_mexico.csv} dataset.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      fecha  visitantes\_internacionales  turismo\_al\_interior  \textbackslash{}
+0  01/01/16                        7808                 1690
+1  01/02/16                        7666                 1683
+2  01/03/16                        8625                 1983
+3  01/04/16                        7717                 1601
+4  01/05/16                        7665                 1548
+
+   turismo\_fronterizo  excursionistas \_fronterizos  pasajeros\_crucero
+0                1152                         4332                634
+1                1048                         4250                685
+2                1224                         4678                739
+3                1083                         4451                582
+4                1154                         4538                424
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{exploratory-data-analysis}{%
+\subsubsection{Exploratory Data
+Analysis}\label{exploratory-data-analysis}}
+
+    In the following we are going to answer a pair of questions using the
+datasets.
+
+    \hypertarget{what-were-the-ten-pueblos-muxe1gicos-with-the-most-population-in-2015}{%
+\paragraph{What were the ten Pueblos mágicos with the most population in
+2015?}\label{what-were-the-ten-pueblos-muxe1gicos-with-the-most-population-in-2015}}
+
+    In order to answer this question we sort the dataset by that column
+storing that information in a new variable, and then we obtain the firts
+then rows corresponding to ten Pueblos máxicos with de most population
+in 2015.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pob\PYZus{}2015\PYZus{}magic\PYZus{}towns}\PY{o}{=}\PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pob\PYZus{}2015}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{pob\PYZus{}10\PYZus{}towns\PYZus{}most}\PY{o}{=}\PY{n}{pob\PYZus{}2015\PYZus{}magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pueblo\PYZus{}magico}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{pob\PYZus{}10\PYZus{}towns\PYZus{}most}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+44                      Tlaquepaque
+4                            La Paz
+48                          Metepec
+18       San Cristóbal de las Casas
+117                       Guadalupe
+113                        Papantla
+15             Comitán de Domínguez
+37                  Lagos de Moreno
+81               San Andrés Cholula
+67     Bahía de Banderas (Sayulita)
+Name: pueblo\_magico, dtype: object
+    \end{Verbatim}
+
+    The last list shows the 10 Pueblos mágicos with the most population in
+2015.
+
+    \hypertarget{what-were-the-ten-pueblos-muxe1gicos-with-de-least-population-in-2010}{%
+\paragraph{What were the ten Pueblos mágicos with de least population in
+2010?}\label{what-were-the-ten-pueblos-muxe1gicos-with-de-least-population-in-2010}}
+
+    We do the same, store in a variable the dataframe of Pueblos mágicos
+ordered in base of \texttt{pob\_2010} column, then we print the
+registers of interest.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pob\PYZus{}2010\PYZus{}magic\PYZus{}towns}\PY{o}{=}\PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pob\PYZus{}2010}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{pob\PYZus{}10\PYZus{}towns\PYZus{}least}\PY{o}{=}\PY{n}{pob\PYZus{}2010\PYZus{}magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pueblo\PYZus{}magico}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{pob\PYZus{}10\PYZus{}towns\PYZus{}least}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+72                  Capulálpam de Méndez
+8                                Candela
+10                              Guerrero
+68                            Bustamante
+105                                 Mier
+74     San Pedro y San Pablo Teposcolula
+122              Teúl de González Ortega
+40               San Sebastián del Oeste
+2                     San José de Gracia
+33                     Mineral del Chico
+Name: pueblo\_magico, dtype: object
+    \end{Verbatim}
+
+    These are the ten Pueblos mágicos with the least population in 2010.
+
+    \hypertarget{data-wrangling}{%
+\subsubsection{Data Wrangling}\label{data-wrangling}}
+
+    We create a \texttt{DataFrame} with the table in the exam's PDF
+containing the Full name and the corresponding ISO code.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado\PYZus{}iso.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Full name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+             Full name 3-letter-code
+0       Aguascalientes           AGU
+1      Baja California           BCN
+2  Baja California Sur           BCS
+3             Campeche           CAM
+6              Chiapas           CHP
+\end{Verbatim}
+\end{tcolorbox}
+        
+    First of all, we are going to check if the data in \texttt{Full\ name}
+is equal to the set of states storing in \texttt{estado} column in the
+original \texttt{pueblos\_magicos.csv}. In the next cell, we charge the
+different registers of \texttt{df\_estado\_iso} and
+\texttt{pueblos\_magicos.csv}and check if the two list of states are
+equal
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{states\PYZus{}full\PYZus{}name}\PY{o}{=}\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Full name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}list}\PY{p}{(}\PY{p}{)}
+\PY{n}{states\PYZus{}full\PYZus{}name}\PY{o}{.}\PY{n}{sort}\PY{p}{(}\PY{p}{)}
+\PY{n}{states\PYZus{}original}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{states\PYZus{}original}\PY{o}{.}\PY{n}{sort}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{states\PYZus{}full\PYZus{}name}\PY{o}{==}\PY{n}{states\PYZus{}original}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+False
+    \end{Verbatim}
+
+    The last result is \texttt{False}, then we are going to check the set of
+states in the original data set \texttt{pueblos\_magicos.csv}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{states\PYZus{}original}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['Aguascalientes',
+ 'Baja California',
+ 'Baja California Sur',
+ 'Campeche',
+ 'Chiapas',
+ 'Chihuahua',
+ 'Coahuila',
+ 'Colima',
+ 'Durango',
+ 'Guanajuato',
+ 'Guerrero',
+ 'Hidalgo',
+ 'Jalisco',
+ 'Mexico',
+ 'Michoacan',
+ 'Morelos',
+ 'Nayarit',
+ 'Nuevo Leon',
+ 'Oaxaca',
+ 'Puebla',
+ 'Queretaro',
+ 'Quintana Roo',
+ 'San Luis Potosi',
+ 'Sinaloa',
+ 'Sonora',
+ 'Tabasco',
+ 'Tamaulipas',
+ 'Tlaxcala',
+ 'Veracruz',
+ 'Yucatan',
+ 'Zacatecas',
+ 'Zacatezas']
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can see a problem with a typo in Zacatecas spelling, therefore exists
+a row with a state \texttt{Zacatezas} instead of \texttt{Zacatecas}. We
+are going to repair that mistake in the dataset. We will replace
+\texttt{Zacatezas} with \texttt{Zacatecas} and then check if the set of
+states of the setting dataset is equal to the list of states in the
+table \texttt{df\_estado\_iso}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Zacatezas}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Zacatecas}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{states\PYZus{}original\PYZus{}correct}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{states\PYZus{}original\PYZus{}correct}\PY{o}{.}\PY{n}{sort}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{states\PYZus{}original\PYZus{}correct}\PY{o}{==}\PY{n}{states\PYZus{}full\PYZus{}name}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+True
+    \end{Verbatim}
+
+    Finally, with the same set of states in the original dataset and
+\texttt{df\_estado\_iso} we can set the \texttt{estado} column with the
+corresponding ISO code using a dictionary with de \texttt{Full\ name} as
+a key and \texttt{3-letter-code} as a value.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{dic\PYZus{}states\PYZus{}original\PYZus{}correct}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3\PYZhy{}letter\PYZhy{}code}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Full name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{state} \PY{o+ow}{in} \PY{n}{states\PYZus{}full\PYZus{}name}\PY{p}{:}
+    \PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{n}{state}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{dic\PYZus{}states\PYZus{}original\PYZus{}correct}\PY{p}{[}\PY{n}{state}\PY{p}{]}
+\PY{n}{magic\PYZus{}towns}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+        pueblo\_magico estado  pob\_2010  pob\_2015
+0            Asientos    AGU     48358     50864
+1            Calvillo    AGU     57627     60760
+2  San José de Gracia    AGU      7160      9661
+3              Tecate    BCN     89999    110870
+4              La Paz    BCS    265717    293687
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{analysis}{%
+\subsubsection{Analysis}\label{analysis}}
+
+    In this section, we show a executive summary for the historical
+evolution of International tourism in Mexico.
+
+    Before to begin, we see the main info and check the differents
+cathegories of tourism.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{dayfirst}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 71 entries, 0 to 70
+Data columns (total 6 columns):
+ \#   Column                       Non-Null Count  Dtype
+---  ------                       --------------  -----
+ 0   fecha                        71 non-null     datetime64[ns]
+ 1   visitantes\_internacionales   71 non-null     int64
+ 2   turismo\_al\_interior          71 non-null     int64
+ 3   turismo\_fronterizo           71 non-null     int64
+ 4   excursionistas \_fronterizos  71 non-null     int64
+ 5   pasajeros\_crucero            71 non-null     int64
+dtypes: datetime64[ns](1), int64(5)
+memory usage: 3.5 KB
+    \end{Verbatim}
+
+    We have four tourism cathegories:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  turismo al interior
+\item
+  turismo fronterizo
+\item
+  excursionistas fronterizos
+\item
+  pasajeros crucero
+\end{enumerate}
+
+From the dataset we obtain the information of what years and months we
+have information of international tourism.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{year\PYZus{}tourism}\PY{o}{=}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year}
+\PY{n}{month\PYZus{}tourism}\PY{o}{=}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month}
+\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{year\PYZus{}tourism}
+\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{month}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{month\PYZus{}tourism}
+\PY{n}{set\PYZus{}years\PYZus{}tourism}\PY{o}{=}\PY{n+nb}{set}\PY{p}{(}\PY{n}{year\PYZus{}tourism}\PY{p}{)}
+\PY{n}{set\PYZus{}months\PYZus{}tourism}\PY{o}{=}\PY{n+nb}{set}\PY{p}{(}\PY{n}{month\PYZus{}tourism}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{set\PYZus{}years\PYZus{}tourism}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{set\PYZus{}months\PYZus{}tourism}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{2016, 2017, 2018, 2019, 2020, 2021\}
+\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12\}
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{First day of registration }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Last day of registration }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+First day of registration  2016-01-01 00:00:00
+Last day of registration  2021-11-01 00:00:00
+    \end{Verbatim}
+
+    First, we graph the evolution of total tourism from \texttt{01/01/2016}
+to \texttt{01/11/2021}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{plotnine} \PY{k+kn}{import} \PY{o}{*}
+\PY{n}{gg1}\PY{o}{=}\PY{n}{ggplot}\PY{p}{(}\PY{n}{mexico\PYZus{}tourism}\PY{p}{)}\PY{o}{+}\PY{n}{geom\PYZus{}line}\PY{p}{(}\PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{visitantes\PYZus{}internacionales}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{theme}\PY{p}{(}\PY{n}{figure\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{labs}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tourists (x1000)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{+}\PY{n}{scale\PYZus{}x\PYZus{}date}\PY{p}{(}\PY{n}{date\PYZus{}breaks}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1 year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{date\PYZus{}labels}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{gg1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Take-Home-test-Nu-Roberto_files/Take-Home-test-Nu-Roberto_37_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<ggplot: (8754084237210)>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Afterwards, we graph the evolution of the international tourism per
+cathegory in all the time range we have.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{colors\PYZus{}palette}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}91A3E1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}83B692}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}F9ADA0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsh{}CD6FD5}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{n}{tourism\PYZus{}cathegory}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{columns}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+\PY{n}{dfm\PYZus{}mexico\PYZus{}tourism} \PY{o}{=} \PY{n}{mexico\PYZus{}tourism}\PY{o}{.}\PY{n}{melt}\PY{p}{(}\PY{n}{id\PYZus{}vars}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{value\PYZus{}vars}\PY{o}{=}\PY{n}{tourism\PYZus{}cathegory}\PY{p}{)}
+\PY{n}{gg2}\PY{o}{=}\PY{n}{ggplot}\PY{p}{(}\PY{n}{dfm\PYZus{}mexico\PYZus{}tourism}\PY{p}{)}\PY{o}{+}\PY{n}{geom\PYZus{}line}\PY{p}{(}\PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fecha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{variable}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{group}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{variable}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}\PY{n}{size}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{n}{theme}\PY{p}{(}\PY{n}{figure\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{scale\PYZus{}x\PYZus{}date}\PY{p}{(}\PY{n}{date\PYZus{}breaks}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1 year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{date\PYZus{}labels}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{+}\PY{n}{theme}\PY{p}{(}\PY{n}{figure\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{labs}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tourists (x1000)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{+}\PY{n}{scale\PYZus{}color\PYZus{}manual}\PY{p}{(}\PY{n}{values}\PY{o}{=}\PY{n}{colors\PYZus{}palette}\PY{p}{,}\PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tourism type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{gg2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Take-Home-test-Nu-Roberto_files/Take-Home-test-Nu-Roberto_39_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<ggplot: (8754084144628)>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Where EF,PC,TI, and TF correspond to \emph{excursionistas
+fronterizos},\emph{pasajeros en crucero},\emph{turismo al interior}, and
+\emph{turismo fronterizo} respectively.
+
+We see the evolution of the tourism from 2016 to 2021. Clearly, at the
+beginning of 2020 we observe an abrupt decreasing of the four tourism
+cathegories. It could be for the COVID-19 pandemic. Moreover, we observe
+a in different proportion each cathegory after 2020. Before 2020 we
+observed in decreasing order of proportion EF, TI, TF, and PC.
+
+    We continue to evaluate the distribution of each tourism cathegory. We
+are going to see this with a boxplot.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k}{def} \PY{n+nf}{mean}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\PY{n}{means}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{n}{tourism\PYZus{}cathegory}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}mexico\PYZus{}tourism.boxplot(column=tourism\PYZus{}cathegory,figsize=(10,7),showmeans=True)}
+\PY{n}{gg3}\PY{o}{=}\PY{n}{ggplot}\PY{p}{(}\PY{n}{dfm\PYZus{}mexico\PYZus{}tourism}\PY{p}{)}\PY{o}{+}\PY{n}{geom\PYZus{}boxplot}\PY{p}{(}\PY{n}{aes}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{variable}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{labs}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tourism type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tourists (x1000)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{gg3}\PY{o}{=} \PY{p}{(}
+    \PY{n}{ggplot}\PY{p}{(}\PY{n}{dfm\PYZus{}mexico\PYZus{}tourism}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{value}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+} \PY{n}{geom\PYZus{}boxplot}\PY{p}{(}\PY{n}{aes}\PY{p}{(}\PY{n}{fill}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{variable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+} \PY{n}{xlab}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tourism type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{o}{+} \PY{n}{ylab}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tourists (x1000)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{o}{+} \PY{n}{scale\PYZus{}y\PYZus{}continuous}\PY{p}{(}\PY{n}{breaks}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5000}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{,} 
+                         \PY{n}{limits}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5000}\PY{p}{]}\PY{p}{)}
+    \PY{o}{+} \PY{n}{scale\PYZus{}x\PYZus{}discrete}\PY{p}{(}\PY{n}{labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+    \PY{o}{+} \PY{n}{ggtitle}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Tourists per type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{o}{+} \PY{n}{theme}\PY{p}{(}\PY{n}{figure\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{,}\PY{n}{legend\PYZus{}position}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bottom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{legend\PYZus{}box\PYZus{}spacing}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{)}
+    \PY{o}{+} \PY{n}{stat\PYZus{}summary}\PY{p}{(}\PY{n}{fun\PYZus{}y}\PY{o}{=} \PY{n}{mean}\PY{p}{,} \PY{n}{geom}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{point}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{colour}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{black}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,}
+               \PY{n}{position} \PY{o}{=} \PY{n}{position\PYZus{}dodge2}\PY{p}{(}\PY{n}{width} \PY{o}{=} \PY{l+m+mf}{0.75}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{guides}\PY{p}{(}\PY{n}{fill}\PY{o}{=}\PY{n}{guide\PYZus{}legend}\PY{p}{(}\PY{n}{title}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tourism type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{scale\PYZus{}fill\PYZus{}manual}\PY{p}{(}\PY{n}{values}\PY{o}{=}\PY{n}{colors\PYZus{}palette}\PY{p}{,}\PY{n}{labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+    \PY{o}{+}\PY{n}{annotate}\PY{p}{(}\PY{n}{geom}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{excursionistas \PYZus{}fronterizos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{200}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{excursionistas \PYZus{}fronterizos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{size} \PY{o}{=} \PY{l+m+mi}{8}\PY{p}{)}
+    \PY{o}{+}\PY{n}{annotate}\PY{p}{(}\PY{n}{geom}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pasajeros\PYZus{}crucero}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{200}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pasajeros\PYZus{}crucero}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{size} \PY{o}{=} \PY{l+m+mi}{8}\PY{p}{)}
+    \PY{o}{+}\PY{n}{annotate}\PY{p}{(}\PY{n}{geom}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}al\PYZus{}interior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{200}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}al\PYZus{}interior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{size} \PY{o}{=} \PY{l+m+mi}{8}\PY{p}{)}
+    \PY{o}{+}\PY{n}{annotate}\PY{p}{(}\PY{n}{geom}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{x}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}fronterizo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{200}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{floor}\PY{p}{(}\PY{n}{means}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}fronterizo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{size} \PY{o}{=} \PY{l+m+mi}{8}\PY{p}{)}
+\PY{p}{)}
+\PY{n}{gg3}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Take-Home-test-Nu-Roberto_files/Take-Home-test-Nu-Roberto_42_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<ggplot: (8754054257255)>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The last plot show outliers in \texttt{turismo\_al\_interior} and
+asymmetry in \texttt{excursionistas\_fronterizos}. That could be explain
+for the bigger drop in 2020 of this cathegories in a short period of
+time with respect to the others. In addition, we observe a high
+variability in the cathegory of \texttt{excursionistas\_fronterizos},
+therefore we can draw from the data that this tourism type changed more
+from 2016 to 2021. Moreover, we show in number the mean of each
+cathegory during that period.
+
+Finally, we are going to show the mean proportion of each tourism
+cathegory per year.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Import libraries}
+\PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{pyplot} \PY{k}{as} \PY{n}{plt}
+\PY{n}{plt}\PY{o}{.}\PY{n}{style}\PY{o}{.}\PY{n}{use}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ggplot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{fig}\PY{p}{,}\PY{n}{axs}\PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{)}
+\PY{n}{list\PYZus{}of\PYZus{}years}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n}{set\PYZus{}years\PYZus{}tourism}\PY{p}{)}
+\PY{n}{dic\PYZus{}tourism\PYZus{}cathegory}\PY{o}{=}\PY{p}{\PYZob{}}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{excursionistas \PYZus{}fronterizos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pasajeros\PYZus{}crucero}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}al\PYZus{}interior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}fronterizo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TF}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{dic\PYZus{}colors\PYZus{}cathegory}\PY{o}{=}\PY{p}{\PYZob{}}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{excursionistas \PYZus{}fronterizos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{colors\PYZus{}palette}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pasajeros\PYZus{}crucero}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{colors\PYZus{}palette}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}al\PYZus{}interior}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{colors\PYZus{}palette}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,}
+\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{turismo\PYZus{}fronterizo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{colors\PYZus{}palette}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}
+\PY{p}{\PYZcb{}}
+\PY{n}{index\PYZus{}year}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{k}{def} \PY{n+nf}{make\PYZus{}autopct}\PY{p}{(}\PY{n}{values}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf}{my\PYZus{}autopct}\PY{p}{(}\PY{n}{pct}\PY{p}{)}\PY{p}{:}
+        \PY{n}{total} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{values}\PY{p}{)}
+        \PY{n}{val} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{pct}\PY{o}{*}\PY{n}{total}\PY{o}{/}\PY{l+m+mf}{100.0}\PY{p}{)}\PY{p}{)}
+        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}p:.2f\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ (}\PY{l+s+si}{\PYZob{}v:d\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{p}\PY{o}{=}\PY{n}{pct}\PY{p}{,}\PY{n}{v}\PY{o}{=}\PY{n}{val}\PY{p}{)}
+    \PY{k}{return} \PY{n}{my\PYZus{}autopct}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
+        \PY{n}{df\PYZus{}aux}\PY{o}{=}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{n}{mexico\PYZus{}tourism}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{n}{list\PYZus{}of\PYZus{}years}\PY{p}{[}\PY{n}{index\PYZus{}year}\PY{p}{]}\PY{p}{]}
+        \PY{n}{total\PYZus{}tourists}\PY{o}{=}\PY{n}{df\PYZus{}aux}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{visitantes\PYZus{}internacionales}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}
+        \PY{n}{mean\PYZus{}total\PYZus{}tourists}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{total\PYZus{}tourists}\PY{p}{)}
+        \PY{n}{df\PYZus{}aux}\PY{o}{=}\PY{n}{df\PYZus{}aux}\PY{p}{[}\PY{n}{tourism\PYZus{}cathegory}\PY{p}{]}
+        \PY{n}{cathegory\PYZus{}mean}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{df\PYZus{}aux}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n}{pie\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{n}{dic\PYZus{}tourism\PYZus{}cathegory}\PY{p}{[}\PY{n}{c}\PY{p}{]} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{cathegory\PYZus{}mean}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{to\PYZus{}list}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+        \PY{n}{pie\PYZus{}colors}\PY{o}{=}\PY{p}{[}\PY{n}{dic\PYZus{}colors\PYZus{}cathegory}\PY{p}{[}\PY{n}{c}\PY{p}{]} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{cathegory\PYZus{}mean}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{to\PYZus{}list}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+        \PY{n}{wedges}\PY{p}{,} \PY{n}{texts}\PY{p}{,} \PY{n}{autotexts}\PY{o}{=}\PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{pie}\PY{p}{(}\PY{n}{cathegory\PYZus{}mean}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+        \PY{n}{autopct} \PY{o}{=} \PY{n}{make\PYZus{}autopct}\PY{p}{(}\PY{n}{cathegory\PYZus{}mean}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{n}{shadow} \PY{o}{=} \PY{k+kc}{True}\PY{p}{,}
+        \PY{n}{labels}\PY{o}{=}\PY{n}{pie\PYZus{}labels}\PY{p}{,}
+        \PY{n}{colors}\PY{o}{=}\PY{n}{pie\PYZus{}colors}\PY{p}{,}
+        \PY{n}{startangle} \PY{o}{=} \PY{l+m+mi}{90}\PY{p}{,}
+        \PY{n}{textprops}\PY{o}{=}\PY{n+nb}{dict}\PY{p}{(}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{,}
+        \PY{n}{radius}\PY{o}{=}\PY{l+m+mf}{1.2}
+        \PY{p}{)}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{list\PYZus{}of\PYZus{}years}\PY{p}{[}\PY{n}{index\PYZus{}year}\PY{p}{]}\PY{p}{,}\PY{n}{pad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+        \PY{n}{index\PYZus{}year}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+\PY{c+c1}{\PYZsh{} Adding legend}
+\PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{wedges}\PY{p}{,} \PY{n}{pie\PYZus{}labels}\PY{p}{,}
+    \PY{n}{title} \PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tourism type}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{n}{loc} \PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{center left}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{n}{bbox\PYZus{}to\PYZus{}anchor} \PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{0.6}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{left}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,}
+                    \PY{n}{bottom}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} 
+                    \PY{n}{right}\PY{o}{=}\PY{l+m+mf}{0.9}\PY{p}{,} 
+                    \PY{n}{top}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,} 
+                    \PY{n}{wspace}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{,} 
+                    \PY{n}{hspace}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Take-Home-test-Nu-Roberto_files/Take-Home-test-Nu-Roberto_44_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    In this plot, we show the mean proportion of each tourism cathegory per
+year. We observe an increasing behavior of
+\texttt{turismo\ al\ interior} with respect to the mean of each year.
+Analogously, we observe that in \texttt{turismo\ fronterizo}, with the
+only exception of 2020 where every cathegory dropped. On the other hand,
+we observe an decreasing behavior from 2016 to 2022 of
+\texttt{pasajeros\ crucero} and \texttt{excursionistas\ fronterizos}.
+
+We have already seen that each cathegory drop from 2019 to 2020.
+Computing the relative drop from 2019 to 2020 of each cathegory we
+obtain that \texttt{pasajeros\ crucero} dropped to 28\% of tourists with
+respect to 2019,\texttt{turismo\ al\ interior} dropped to 45\%,
+\texttt{excursionistas\ fronterizos} dropped to 59\%, and
+\texttt{turismo\ fronterizo} dropped to 63\% with respect to 2019's
+data. We can conclude that \texttt{pasajeros\ crucero} was the cathegory
+with the higher drop with respect to the mean in 2020.
+
+    \hypertarget{creativity-to-communicate-analytical-results}{%
+\subsubsection{Creativity to communicate analytical
+results}\label{creativity-to-communicate-analytical-results}}
+
+    Finally, we will answer The Leadership team's question: \emph{The number
+of Pueblos mágicos in each state}
+
+It is an interesting question know if there are states that do not have
+\emph{Pueblos mágicos}, therefore a barplot is natural option for that
+task because we can see and contrast the number of \emph{Pueblos
+mágicos} of each Mexico state. However, in this plot we have 32 states
+and it could be difficult to see the exact number of \emph{Pueblos
+mágicos} and how many states have the same number of \emph{Pueblos
+mágicos}.
+
+In the following code cell we will show the plot that tries to solve
+those problems and with the information required by The Leadership team.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{dic\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{estado\PYZus{}iso\PYZus{}code}\PY{o}{=}\PY{n}{df\PYZus{}estado\PYZus{}iso}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3\PYZhy{}letter\PYZhy{}code}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}list}\PY{p}{(}\PY{p}{)}
+\PY{k}{for} \PY{n}{state} \PY{o+ow}{in} \PY{n}{estado\PYZus{}iso\PYZus{}code}\PY{p}{:}
+    \PY{n}{df\PYZus{}aux}\PY{o}{=}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{n}{magic\PYZus{}towns}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{n}{state}\PY{p}{]}
+    \PY{n}{dic\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{p}{[}\PY{n}{state}\PY{p}{]}\PY{o}{=}\PY{n}{df\PYZus{}aux}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{df\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{dic\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}pueblos\PYZus{}magicos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{dic\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{gg5}\PY{o}{=}\PY{p}{(}
+    \PY{n}{ggplot}\PY{p}{(}\PY{n}{df\PYZus{}num\PYZus{}magic\PYZus{}towns\PYZus{}per\PYZus{}state}\PY{p}{,}\PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}pueblos\PYZus{}magicos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{n}{aes}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}pueblos\PYZus{}magicos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{factor(num\PYZus{}pueblos\PYZus{}magicos)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{scale\PYZus{}size\PYZus{}continuous}\PY{p}{(}\PY{n}{guide}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}\PY{n+nb}{range}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{14}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{scale\PYZus{}color\PYZus{}brewer}\PY{p}{(}\PY{n+nb}{type}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{qual}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{palette}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{numero de pueblos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{o}{+}\PY{n}{scale\PYZus{}x\PYZus{}discrete}\PY{p}{(}\PY{n}{expand}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{labs}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{estado}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num de pueblos mágicos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{o}{+}\PY{n}{scale\PYZus{}y\PYZus{}continuous}\PY{p}{(}\PY{n}{breaks}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{11}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{o}{+}\PY{n}{coord\PYZus{}flip}\PY{p}{(}\PY{p}{)}
+    \PY{o}{+}\PY{n}{theme\PYZus{}light}\PY{p}{(}\PY{p}{)}
+    \PY{o}{+}\PY{n}{theme}\PY{p}{(}\PY{n}{figure\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{,}\PY{n}{legend\PYZus{}position}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bottom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{legend\PYZus{}box\PYZus{}spacing}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,}\PY{n}{line}\PY{o}{=}\PY{n}{element\PYZus{}line}\PY{p}{(}\PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{black}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}
+    \PY{n}{legend\PYZus{}title\PYZus{}align}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{p}{)}
+\PY{n}{gg5}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Take-Home-test-Nu-Roberto_files/Take-Home-test-Nu-Roberto_48_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<ggplot: (8754084162482)>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The last graphs in x-axis has the number of \emph{Pueblos mágicos} and
+in y-axis the states of Mexico. For each row or state we have a dot with
+center aligned with the exact number \emph{Pueblos mágicos} in that
+state, therefore we answer the main question. In addition, we can
+observe that points with the same color correspond to states with the
+same number of \emph{Pueblos mágicos} and the legend says what is the
+number of \emph{Pueblos mágicos} these states have. Moreover, the size
+of the dots increase with the number of \emph{Pueblos mágicos} that
+represent. The increasing size helps to identify how many states have
+the maximum and minimun number of \emph{Pueblos mágicos}, then you can
+identify what are these states.
+
+    \hypertarget{machine-learning-solutions-mindset}{%
+\subsection{Machine Learning solutions
+mindset}\label{machine-learning-solutions-mindset}}
+
+    The \textbf{Business use case} we chose is \textbf{Case 1}. We propose
+a solution for accepting credit card customers in a digital bank.
+
+    \hypertarget{step-1}{%
+\subsubsection{Step 1}\label{step-1}}
+
+First of all, we think in the database which help us to make a decision.
+
+In general, credit card decisions are made based in the credit history.
+The credit history we will use is the \emph{Buró de crédito}'s history.
+
+\emph{Buró de crédito}'s credit history for each person contain a list
+in detail of past credits requested to other credit institutions and the
+status of each of this credits.
+
+There are 3 status in \emph{Buró de crédito} system, they are: 1. up to
+date with payment. 2. From 1 to 89 delay days. 3. More than 90 delay
+days.
+
+Of course, the status depends on the type of credit, amount to pay,
+credit limit, maximum credit, current balance and customer's current
+income, etc.
+
+We only have in mind the maximum credit, current balance, and the status
+of all credits in the history because we are in a digital bank context.
+That information could help to measure the payment ability of the
+customer.
+
+In \emph{Buró de crédito} we can find that input (maximum credit,current
+balance) with its respect status.
+
+With that information the idea is training a Neural Network for binary
+classification problem. The classes are \emph{up to date with payment}
+and the other one is if the status is \emph{From 1 to 89 delay days} or
+\emph{More than 90 delay days}
+
+The decision could be based in the output of this Neural Network given a
+credit maximum and a fixed current balance.
+
+    \hypertarget{step-2}{%
+\subsubsection{Step 2}\label{step-2}}
+
+In this part, we are going to state the last approach mathematically.
+
+First of all, we need to abstract the data in mathematical notation.
+
+The sample of a customer, obtaining in a Query to \emph{Buró de
+crédito}'s database, is of the form
+\[\{(X_{1i},X_{2i},Y_i)\in \mathbb{R}^2\ |\ Y_n\in\{0,1\},i=1,2,\dots,n\},\]
+
+where \(n\) is the number of credits.
+
+Here 1. \(X_{1i}\) is the maximum credit of \(i\)-th credit. 2.
+\(X_{2i}\) is the current balance of \(i\)-th credit. 3. \(Y_i\) is a
+dummy variable such as
+\[Y_i=\left\lbrace\begin{matrix}1&\text{ if }i\text{-th credit has \textit{up to date payment} status}\\
+0&\text{otherwise}\end{matrix}\right.\]
+
+Determine the number of hidden layers and the number of neurons of each
+layer is something that requires experimentation but it is task that can
+be done with a framework.
+
+Because of our approach our neural network has two neurons in the input
+layer and one in the output layer.
+
+We can use sigmoid activation function its form is
+\[ \sigma(x)=\frac{1}{1+e^{-x}},\] and its range is \([0,1]\). Therefore
+our Neural Network is a function \(f:\mathbb{R}^2\to [0,1]\).
+
+For an input \((\hat{X}_1,\hat{X}_2)\) we set the correspondent dummy
+variable as
+\[\hat{Y}=\left\lbrace\begin{matrix}1&\text{ if }f(\hat{X}_1,\hat{X}_2)>0.5\\ 0&\text{ otherwise }\end{matrix}\right.\]
+
+Thinking in a extreme case, if we want to accept credit card customer we
+train the neural network with his personal dataset, then we test with
+his required credit and a 0 or fixed tolerable current balance. We
+accept the customer if we obtain a \(1\) in the last classification and
+we do not accept him if we obtain a \(0\).
+
+On the other hand, if we do not have enough data for the customer we can
+fixed a credit based in his current income but it needs to be an amount
+with a low risk for the company.
+
+    \hypertarget{step-3}{%
+\subsubsection{Step 3}\label{step-3}}
+
+We need to identify the main computation tasks in this solution. The
+first one is to obtain the personal data set of each customer from
+\emph{Buró de Crédito}. The second one is the computational cost for
+training the neural network in order to make a decision on the customer
+request.
+
+For the first task we need to get information from the customer and with
+that information obtain the customer's sample stated in the last
+section.
+
+If we already have the customer's personal data, then we can ask for the
+sample required for the neural network training through \emph{BigQuery}
+by Google Cloud. This technology has support for connections to a
+external database source. In addition, it allows to execute statistics
+of large amount data in real-time that is exactly what we need in a
+digital bank.
+
+For the Machine Learning task, I mean, the Neural Network training, we
+can use \emph{Vertex AI} by Google Cloud. This technology supports
+AutoML that is a useful tool for training different Neural Networks
+corresponding to each customer, and we avoid the hard task of checking
+the hidden structure of the Neural Network. In addition,we can assess
+the final model in a friendly way. Finally, we deploy the model for
+online predictions required in our digital bank.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
